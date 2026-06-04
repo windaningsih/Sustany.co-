@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sustany.co — Zero Waste Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+<style>
+/* =============================================================
+   DESIGN TOKENS
+   ============================================================= */
+:root {
+  --c-forest:   #1A3C2E;
+  --c-green:    #2A6B4A;
+  --c-sage:     #4E9472;
+  --c-mint:     #A8D5B8;
+  --c-cream:    #F5F0E8;
+  --c-warm:     #EDE8DC;
+  --c-sand:     #D6CFB9;
+  --c-earth:    #6B5B45;
+  --c-brown:    #3D2B1F;
+  --c-white:    #FDFCFA;
+  --c-text:     #1E2218;
+  --c-muted:    #6E7469;
+  --c-border:   #DDD8CC;
+  --c-overlay:  rgba(26,60,46,0.06);
+
+  --r-sm:  6px;
+  --r-md:  12px;
+  --r-lg:  20px;
+  --r-xl:  32px;
+  --r-pill:999px;
+
+  --shadow-card: 0 2px 12px rgba(26,60,46,0.08);
+  --shadow-lift: 0 8px 32px rgba(26,60,46,0.14);
+  --shadow-pop:  0 20px 60px rgba(26,60,46,0.18);
+
+  --nav-h: 68px;
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+  --transition:   0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =============================================================
+   RESET & BASE
+   ============================================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--c-cream);
+  color: var(--c-text);
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; width: 100%; object-fit: cover; }
+button { font-family: var(--font-body); cursor: pointer; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+
+/* =============================================================
+   PAGE SYSTEM
+   ============================================================= */
+.page { display: none; min-height: 100vh; }
+.page.active { display: block; }
+
+/* =============================================================
+   NAVBAR
+   ============================================================= */
+.navbar {
+  position: sticky; top: 0; z-index: 500;
+  height: var(--nav-h);
+  background: rgba(253,252,250,0.92);
+  backdrop-filter: blur(16px) saturate(1.4);
+  border-bottom: 1px solid var(--c-border);
+  padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px;
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-display);
+  font-size: 22px; color: var(--c-forest);
+  cursor: pointer; flex-shrink: 0;
+  letter-spacing: -0.3px;
+}
+.nav-logo-leaf {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--c-sage), var(--c-forest));
+  border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: #fff;
+}
+
+.nav-center { display: flex; align-items: center; gap: 4px; }
+.nav-btn {
+  background: none; border: none;
+  padding: 8px 16px; border-radius: var(--r-pill);
+  font-size: 14px; font-weight: 500;
+  color: var(--c-muted); transition: var(--transition);
+}
+.nav-btn:hover { background: var(--c-warm); color: var(--c-text); }
+.nav-btn.active {
+  background: var(--c-forest); color: #fff;
+}
+
+.nav-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+.btn-wa-nav {
+  display: flex; align-items: center; gap: 7px;
+  background: #25D366; color: #fff; border: none;
+  padding: 9px 18px; border-radius: var(--r-pill);
+  font-size: 13.5px; font-weight: 500;
+  transition: var(--transition); white-space: nowrap;
+}
+.btn-wa-nav:hover { background: #1aad54; transform: translateY(-1px); }
+
+.btn-cart {
+  position: relative;
+  display: flex; align-items: center; gap: 7px;
+  background: var(--c-warm); border: 1.5px solid var(--c-border);
+  color: var(--c-text); padding: 8px 16px;
+  border-radius: var(--r-pill); font-size: 14px; font-weight: 500;
+  transition: var(--transition);
+}
+.btn-cart:hover { border-color: var(--c-sage); color: var(--c-green); background: var(--c-cream); }
+.cart-dot {
+  position: absolute; top: -4px; right: -4px;
+  width: 18px; height: 18px; background: var(--c-sage); color: #fff;
+  border-radius: 50%; font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--c-cream);
+  transition: transform 0.2s;
+}
+.cart-dot.bump { transform: scale(1.4); }
+
+/* =============================================================
+   HERO
+   ============================================================= */
+.hero {
+  min-height: calc(100vh - var(--nav-h));
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.hero-left {
+  padding: 80px 60px 80px 80px;
+  display: flex; flex-direction: column; justify-content: center;
+  background: var(--c-forest);
+  position: relative; overflow: hidden;
+}
+.hero-left::before {
+  content: '';
+  position: absolute; top: -120px; right: -120px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(78,148,114,0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-left::after {
+  content: '';
+  position: absolute; bottom: -80px; left: -80px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(168,213,184,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(168,213,184,0.15);
+  border: 1px solid rgba(168,213,184,0.3);
+  color: var(--c-mint); padding: 6px 16px;
+  border-radius: var(--r-pill); font-size: 13px; font-weight: 500;
+  margin-bottom: 28px; width: fit-content;
+  letter-spacing: 0.3px;
+}
+.hero-left h1 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4vw, 52px);
+  color: var(--c-cream); line-height: 1.15;
+  margin-bottom: 20px; position: relative; z-index: 1;
+}
+.hero-left h1 em {
+  font-style: italic; color: var(--c-mint);
+}
+.hero-left p {
+  color: rgba(245,240,232,0.72);
+  font-size: 15.5px; line-height: 1.7;
+  max-width: 420px; margin-bottom: 40px;
+  position: relative; z-index: 1;
+}
+
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; position: relative; z-index: 1; }
+.btn-primary {
+  background: var(--c-mint); color: var(--c-forest);
+  border: none; padding: 14px 28px; border-radius: var(--r-pill);
+  font-size: 15px; font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+  transition: var(--transition);
+}
+.btn-primary:hover { background: #C2E0CE; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+.btn-outline-light {
+  background: rgba(255,255,255,0.1);
+  border: 1.5px solid rgba(255,255,255,0.25); color: rgba(245,240,232,0.9);
+  padding: 13px 26px; border-radius: var(--r-pill);
+  font-size: 15px; font-weight: 500; transition: var(--transition);
+}
+.btn-outline-light:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.5); }
+
+.hero-stats {
+  display: flex; gap: 36px; margin-top: 52px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  position: relative; z-index: 1;
+}
+.hero-stat-num {
+  font-family: var(--font-display);
+  font-size: 26px; color: var(--c-mint); line-height: 1;
+}
+.hero-stat-label { font-size: 12px; color: rgba(245,240,232,0.55); margin-top: 4px; }
+
+.hero-right { position: relative; overflow: hidden; }
+.hero-right img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+}
+.hero-right-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(26,60,46,0.35), transparent);
+}
+.hero-badge {
+  position: absolute; bottom: 32px; left: 32px;
+  background: rgba(253,252,250,0.94); backdrop-filter: blur(12px);
+  border-radius: var(--r-lg); padding: 16px 20px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: var(--shadow-pop);
+  max-width: 220px;
+}
+.hero-badge-icon {
+  width: 44px; height: 44px; background: var(--c-mint);
+  border-radius: var(--r-md); display: flex; align-items: center;
+  justify-content: center; font-size: 22px; flex-shrink: 0;
+}
+.hero-badge-text strong { font-size: 14px; font-weight: 600; display: block; }
+.hero-badge-text span { font-size: 12px; color: var(--c-muted); }
+
+/* =============================================================
+   COMMON SECTION
+   ============================================================= */
+.section { max-width: 1200px; margin: 0 auto; padding: 64px 40px; }
+.section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 36px; }
+.section-title {
+  font-family: var(--font-display);
+  font-size: 30px; color: var(--c-forest); line-height: 1.2;
+}
+.section-title em { font-style: italic; color: var(--c-sage); }
+.section-subtitle { font-size: 14px; color: var(--c-muted); max-width: 380px; margin-top: 6px; }
+.btn-link {
+  display: flex; align-items: center; gap: 5px;
+  background: none; border: none; color: var(--c-green);
+  font-size: 14px; font-weight: 500; white-space: nowrap;
+  transition: var(--transition);
+}
+.btn-link:hover { color: var(--c-forest); gap: 9px; }
+
+/* =============================================================
+   PRODUCT CARDS
+   ============================================================= */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 22px;
+}
+
+.product-card {
+  background: var(--c-white); border-radius: var(--r-lg);
+  border: 1px solid var(--c-border);
+  overflow: hidden; display: flex; flex-direction: column;
+  cursor: pointer; transition: var(--transition);
+  position: relative;
+}
+.product-card:hover {
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-4px);
+  border-color: var(--c-mint);
+}
+
+.pc-img {
+  position: relative; height: 200px; overflow: hidden;
+  background: var(--c-warm);
+}
+.pc-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.product-card:hover .pc-img img { transform: scale(1.07); }
+.pc-eco {
+  position: absolute; top: 10px; left: 10px;
+  background: rgba(253,252,250,0.94); backdrop-filter: blur(8px);
+  color: var(--c-green); border: 1px solid rgba(78,148,114,0.25);
+  padding: 4px 10px; border-radius: var(--r-pill);
+  font-size: 11px; font-weight: 600;
+  display: flex; align-items: center; gap: 5px;
+}
+.pc-wish {
+  position: absolute; top: 10px; right: 10px;
+  width: 32px; height: 32px;
+  background: rgba(253,252,250,0.92); border: none; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--c-sand); transition: var(--transition);
+}
+.pc-wish:hover { color: #E23B3B; background: #FEF0F0; }
+
+.pc-body { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; }
+.pc-brand { font-size: 11px; font-weight: 600; color: var(--c-sage); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+.pc-name { font-size: 15px; font-weight: 600; color: var(--c-text); margin-bottom: 6px; line-height: 1.35; }
+.pc-desc { font-size: 13px; color: var(--c-muted); line-height: 1.55; margin-bottom: 16px; flex: 1; }
+.pc-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pc-price { font-family: var(--font-display); font-size: 18px; color: var(--c-forest); }
+.pc-price-old { font-size: 12px; color: var(--c-sand); text-decoration: line-through; margin-left: 4px; }
+.btn-add {
+  width: 36px; height: 36px; flex-shrink: 0;
+  background: var(--c-forest); color: #fff; border: none;
+  border-radius: var(--r-md); font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.btn-add:hover { background: var(--c-green); transform: scale(1.1); }
+
+/* =============================================================
+   CATEGORY FILTERS
+   ============================================================= */
+.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 30px; }
+.filter-chip {
+  background: var(--c-white); border: 1.5px solid var(--c-border);
+  padding: 8px 18px; border-radius: var(--r-pill);
+  font-size: 13.5px; font-weight: 500; color: var(--c-muted);
+  transition: var(--transition);
+}
+.filter-chip:hover { border-color: var(--c-sage); color: var(--c-green); background: var(--c-warm); }
+.filter-chip.active { background: var(--c-forest); border-color: var(--c-forest); color: #fff; }
+
+/* =============================================================
+   SUBSCRIPTION BOX CARDS
+   ============================================================= */
+.box-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+
+.box-card {
+  background: var(--c-white); border: 1.5px solid var(--c-border);
+  border-radius: var(--r-xl); padding: 32px;
+  display: flex; flex-direction: column;
+  cursor: pointer; transition: var(--transition);
+  position: relative; overflow: hidden;
+}
+.box-card::after {
+  content: '';
+  position: absolute; top: -60px; right: -60px;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: var(--c-warm); opacity: 0.6;
+  transition: var(--transition);
+}
+.box-card:hover { box-shadow: var(--shadow-lift); transform: translateY(-4px); border-color: var(--c-mint); }
+.box-card:hover::after { transform: scale(1.2); }
+.box-card.is-popular { border-color: var(--c-sage); background: linear-gradient(160deg, #FDFCFA 0%, #EFF9F3 100%); }
+
+.box-pop-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--c-mint); color: var(--c-forest);
+  padding: 5px 12px; border-radius: var(--r-pill);
+  font-size: 11.5px; font-weight: 700;
+  margin-bottom: 20px; width: fit-content;
+  position: relative; z-index: 1;
+}
+.box-icon {
+  font-size: 42px; margin-bottom: 16px; position: relative; z-index: 1;
+  line-height: 1;
+}
+.box-name {
+  font-family: var(--font-display);
+  font-size: 22px; color: var(--c-forest);
+  margin-bottom: 4px; position: relative; z-index: 1;
+}
+.box-tag { font-size: 12px; color: var(--c-sage); font-weight: 600; margin-bottom: 10px; position: relative; z-index: 1; }
+.box-desc { font-size: 13.5px; color: var(--c-muted); line-height: 1.6; margin-bottom: 20px; position: relative; z-index: 1; }
+
+.box-items-list { margin-bottom: 28px; flex: 1; position: relative; z-index: 1; }
+.box-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 0; border-bottom: 1px solid var(--c-border);
+  font-size: 13.5px; color: var(--c-text);
+}
+.box-item:last-child { border-bottom: none; }
+.box-item i { color: var(--c-sage); flex-shrink: 0; }
+
+.box-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  position: relative; z-index: 1;
+}
+.box-price-main {
+  font-family: var(--font-display); font-size: 28px; color: var(--c-green); line-height: 1;
+}
+.box-price-per { font-size: 12px; color: var(--c-muted); margin-top: 2px; }
+.btn-subscribe {
+  background: var(--c-forest); color: #fff; border: none;
+  padding: 12px 22px; border-radius: var(--r-pill);
+  font-size: 14px; font-weight: 500;
+  display: flex; align-items: center; gap: 7px;
+  transition: var(--transition);
+}
+.btn-subscribe:hover { background: var(--c-green); box-shadow: 0 4px 16px rgba(42,107,74,0.4); }
+
+/* =============================================================
+   CART PAGE
+   ============================================================= */
+.cart-layout { display: grid; grid-template-columns: 1fr 380px; gap: 28px; align-items: start; }
+
+.cart-panel {
+  background: var(--c-white); border: 1px solid var(--c-border);
+  border-radius: var(--r-lg); overflow: hidden;
+}
+.cart-panel-hdr {
+  padding: 20px 24px; border-bottom: 1px solid var(--c-border);
+  font-size: 15px; font-weight: 600; color: var(--c-forest);
+  display: flex; align-items: center; gap: 10px;
+}
+.cart-empty {
+  padding: 80px 24px; text-align: center;
+}
+.cart-empty-icon { font-size: 56px; color: var(--c-sand); margin-bottom: 16px; }
+.cart-empty h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+.cart-empty p { font-size: 14px; color: var(--c-muted); margin-bottom: 24px; }
+
+.cart-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 24px; border-bottom: 1px solid var(--c-border);
+  transition: var(--transition);
+}
+.cart-item:last-child { border-bottom: none; }
+.cart-item:hover { background: var(--c-cream); }
+.ci-img {
+  width: 68px; height: 68px; border-radius: var(--r-md);
+  overflow: hidden; flex-shrink: 0; background: var(--c-warm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+}
+.ci-img img { width: 100%; height: 100%; object-fit: cover; }
+.ci-info { flex: 1; min-width: 0; }
+.ci-brand { font-size: 11px; font-weight: 600; color: var(--c-sage); text-transform: uppercase; letter-spacing: 0.6px; }
+.ci-name { font-size: 14px; font-weight: 600; color: var(--c-text); margin: 2px 0; }
+.ci-price { font-size: 15px; font-weight: 600; color: var(--c-green); }
+.ci-type { font-size: 11px; color: var(--c-muted); }
+.qty-ctrl { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.qty-btn {
+  width: 30px; height: 30px; border: 1.5px solid var(--c-border);
+  border-radius: var(--r-sm); background: none; font-size: 16px; line-height: 1;
+  color: var(--c-muted); display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.qty-btn:hover { border-color: var(--c-sage); color: var(--c-green); background: var(--c-warm); }
+.qty-num { font-size: 15px; font-weight: 600; min-width: 28px; text-align: center; }
+.remove-btn { background: none; border: none; color: var(--c-sand); font-size: 18px; margin-left: 4px; transition: var(--transition); }
+.remove-btn:hover { color: #E23B3B; }
+
+/* ORDER SUMMARY */
+.order-summary {
+  background: var(--c-white); border: 1px solid var(--c-border);
+  border-radius: var(--r-lg); padding: 24px;
+  position: sticky; top: calc(var(--nav-h) + 16px);
+}
+.os-title { font-family: var(--font-display); font-size: 20px; color: var(--c-forest); margin-bottom: 20px; }
+.promo-row { display: flex; gap: 8px; margin-bottom: 20px; }
+.promo-input {
+  flex: 1; padding: 10px 14px;
+  border: 1.5px solid var(--c-border); border-radius: var(--r-md);
+  font-family: var(--font-body); font-size: 13.5px; outline: none;
+  background: var(--c-cream); transition: var(--transition);
+}
+.promo-input:focus { border-color: var(--c-sage); background: var(--c-white); }
+.promo-btn {
+  background: var(--c-warm); border: 1.5px solid var(--c-border);
+  color: var(--c-forest); padding: 10px 14px; border-radius: var(--r-md);
+  font-size: 13.5px; font-weight: 500; transition: var(--transition);
+}
+.promo-btn:hover { background: var(--c-mint); border-color: var(--c-mint); }
+
+.sum-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.sum-label { font-size: 14px; color: var(--c-muted); }
+.sum-val { font-size: 14px; font-weight: 500; color: var(--c-text); }
+.sum-divider { border: none; border-top: 1px solid var(--c-border); margin: 16px 0; }
+.sum-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.sum-total-label { font-size: 16px; font-weight: 600; color: var(--c-text); }
+.sum-total-val {
+  font-family: var(--font-display); font-size: 24px; color: var(--c-green);
+}
+
+/* Payment methods mini */
+.pm-section { margin-bottom: 20px; }
+.pm-label { font-size: 11.5px; font-weight: 600; color: var(--c-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+.pm-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.pm-opt {
+  border: 1.5px solid var(--c-border); border-radius: var(--r-md);
+  padding: 9px 6px; cursor: pointer; transition: var(--transition);
+  text-align: center; background: var(--c-cream);
+}
+.pm-opt:hover { border-color: var(--c-mint); background: var(--c-white); }
+.pm-opt.selected { border-color: var(--c-sage); background: rgba(78,148,114,0.08); }
+.pm-logo { font-size: 11px; font-weight: 800; }
+.pm-name { font-size: 9px; color: var(--c-muted); margin-top: 2px; }
+.gopay-c { color: #00AEFF; }
+.ovo-c   { color: #4C3494; }
+.dana-c  { color: #118EEA; }
+.qris-c  { color: var(--c-green); }
+.bca-c   { color: #005BAA; }
+.mdr-c   { color: #003D79; }
+.bni-c   { color: #F26722; }
+
+.btn-checkout {
+  width: 100%; background: var(--c-forest); color: #fff; border: none;
+  padding: 15px; border-radius: var(--r-pill); font-size: 15px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  transition: var(--transition); margin-bottom: 10px;
+}
+.btn-checkout:hover { background: var(--c-green); box-shadow: 0 6px 20px rgba(26,60,46,0.3); }
+.btn-wa-order {
+  width: 100%; background: #25D366; color: #fff; border: none;
+  padding: 13px; border-radius: var(--r-pill); font-size: 14px; font-weight: 500;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: var(--transition);
+}
+.btn-wa-order:hover { background: #1aad54; }
+.secure-note {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin-top: 14px; font-size: 12px; color: var(--c-muted);
+}
+
+/* =============================================================
+   PAYMENT PAGE
+   ============================================================= */
+.pay-page { max-width: 520px; margin: 0 auto; padding: 48px 24px 80px; }
+.pay-page h2 {
+  font-family: var(--font-display); font-size: 28px; color: var(--c-forest);
+  margin-bottom: 6px;
+}
+.pay-page > p { font-size: 14px; color: var(--c-muted); margin-bottom: 30px; }
+
+.pay-card {
+  background: var(--c-white); border: 1px solid var(--c-border);
+  border-radius: var(--r-lg); padding: 26px; margin-bottom: 16px;
+}
+.pay-card-hdr {
+  font-size: 13px; font-weight: 600; color: var(--c-muted);
+  display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+}
+.pay-total-box {
+  background: linear-gradient(135deg, var(--c-forest), var(--c-green));
+  border-radius: var(--r-md); padding: 20px; text-align: center; margin-bottom: 24px;
+}
+.pay-total-amt {
+  font-family: var(--font-display); font-size: 34px; color: #fff; line-height: 1;
+}
+.pay-total-lbl { font-size: 12px; color: rgba(245,240,232,0.65); margin-top: 6px; }
+
+.pay-opts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
+.pay-opt {
+  border: 2px solid var(--c-border); border-radius: var(--r-md);
+  padding: 14px 8px; text-align: center; cursor: pointer;
+  transition: var(--transition); background: var(--c-cream);
+}
+.pay-opt:hover { border-color: var(--c-mint); background: var(--c-white); }
+.pay-opt.selected { border-color: var(--c-sage); background: rgba(78,148,114,0.08); }
+.pay-opt-logo { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+.pay-opt-name { font-size: 10.5px; color: var(--c-muted); }
+.pay-qris { grid-column: 1/-1; }
+
+.btn-pay {
+  width: 100%; background: var(--c-forest); color: #fff; border: none;
+  padding: 16px; border-radius: var(--r-pill); font-size: 16px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  transition: var(--transition); margin-bottom: 10px;
+}
+.btn-pay:hover { background: var(--c-green); box-shadow: 0 6px 24px rgba(26,60,46,0.35); }
+.btn-back-ghost {
+  width: 100%; background: none; color: var(--c-muted);
+  border: 1.5px solid var(--c-border); padding: 13px; border-radius: var(--r-pill);
+  font-size: 14px; font-weight: 500; display: flex; align-items: center;
+  justify-content: center; gap: 7px; transition: var(--transition);
+}
+.btn-back-ghost:hover { border-color: var(--c-muted); color: var(--c-text); }
+
+/* =============================================================
+   SUCCESS PAGE
+   ============================================================= */
+.success-page { max-width: 460px; margin: 0 auto; padding: 80px 24px; text-align: center; }
+.success-icon {
+  width: 96px; height: 96px; background: linear-gradient(135deg, var(--c-mint), #C8EBDA);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 48px; margin: 0 auto 28px;
+  box-shadow: 0 0 0 16px rgba(168,213,184,0.2);
+}
+.success-page h2 {
+  font-family: var(--font-display); font-size: 32px; color: var(--c-forest); margin-bottom: 12px;
+}
+.success-page p { font-size: 15px; color: var(--c-muted); line-height: 1.7; margin-bottom: 30px; }
+.order-badge {
+  background: var(--c-warm); border: 1px solid var(--c-border);
+  border-radius: var(--r-md); padding: 14px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 30px; font-size: 14px; color: var(--c-muted);
+}
+.order-badge span { font-weight: 700; color: var(--c-forest); font-size: 15px; }
+.success-btns { display: flex; flex-direction: column; gap: 10px; }
+.btn-success-main {
+  background: var(--c-forest); color: #fff; border: none;
+  padding: 15px; border-radius: var(--r-pill); font-size: 15px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: var(--transition);
+}
+.btn-success-main:hover { background: var(--c-green); }
+
+/* =============================================================
+   WHATSAPP FLOAT
+   ============================================================= */
+.wa-float {
+  position: fixed; bottom: 28px; right: 28px; z-index: 999;
+  width: 56px; height: 56px; background: #25D366; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+  transition: var(--transition); color: #fff;
+  animation: waWobble 3s ease-in-out 2s infinite;
+}
+@keyframes waWobble {
+  0%,100%{ transform: rotate(0deg); }
+  20%    { transform: rotate(-12deg); }
+  40%    { transform: rotate(12deg); }
+  60%    { transform: rotate(-6deg); }
+  80%    { transform: rotate(6deg); }
+}
+.wa-float:hover { background: #1aad54; transform: scale(1.12); animation: none; }
+.wa-tip {
+  position: absolute; right: 68px; top: 50%; transform: translateY(-50%);
+  background: var(--c-brown); color: #fff;
+  padding: 7px 14px; border-radius: var(--r-md); font-size: 13px;
+  white-space: nowrap; pointer-events: none;
+  opacity: 0; transition: opacity 0.2s;
+}
+.wa-tip::after {
+  content: ''; position: absolute; left: 100%; top: 50%; transform: translateY(-50%);
+  border: 6px solid transparent; border-left-color: var(--c-brown);
+}
+.wa-float:hover .wa-tip { opacity: 1; }
+
+/* =============================================================
+   TOAST
+   ============================================================= */
+#toast {
+  position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+  background: var(--c-brown); color: #fff;
+  padding: 12px 24px; border-radius: var(--r-pill);
+  font-size: 14px; font-weight: 500; z-index: 9999;
+  pointer-events: none; opacity: 0;
+  transition: opacity 0.25s ease;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  white-space: nowrap;
+}
+
+/* =============================================================
+   FOOTER
+   ============================================================= */
+.footer {
+  background: var(--c-forest);
+  color: rgba(245,240,232,0.6);
+  padding: 60px 40px 32px;
+  margin-top: 60px;
+}
+.footer-inner { max-width: 1200px; margin: 0 auto; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+.footer-brand h3 {
+  font-family: var(--font-display); font-size: 22px; color: var(--c-cream);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+}
+.footer-brand p { font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+.footer-wa-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #25D366; color: #fff; border: none;
+  padding: 10px 18px; border-radius: var(--r-pill);
+  font-size: 14px; font-weight: 500; cursor: pointer; transition: var(--transition);
+}
+.footer-wa-cta:hover { background: #1aad54; }
+.footer-col h4 {
+  font-size: 11px; font-weight: 600; color: var(--c-cream);
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
+}
+.footer-link {
+  display: block; font-size: 14px; color: rgba(245,240,232,0.6);
+  margin-bottom: 10px; cursor: pointer; transition: var(--transition);
+}
+.footer-link:hover { color: var(--c-cream); padding-left: 4px; }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 10px; font-size: 13px;
+}
+.footer-eco-badge {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(168,213,184,0.12); border: 1px solid rgba(168,213,184,0.25);
+  color: var(--c-mint); padding: 6px 14px; border-radius: var(--r-pill); font-size: 12.5px;
+}
+
+/* =============================================================
+   RESPONSIVE
+   ============================================================= */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-right { display: none; }
+  .hero-left { padding: 60px 32px; }
+  .cart-layout { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .navbar { padding: 0 20px; }
+  .nav-center .nav-btn:not(.active) { display: none; }
+  .section { padding: 40px 20px; }
+  .footer { padding: 40px 20px 28px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .pm-grid { grid-template-columns: repeat(4,1fr); }
+  .hero-stats { gap: 20px; }
+  .products-grid { grid-template-columns: repeat(2,1fr); gap: 14px; }
+}
+
+/* =============================================================
+   FEATURE STRIP
+   ============================================================= */
+.feat-strip {
+  background: var(--c-white); border-top: 1px solid var(--c-border); border-bottom: 1px solid var(--c-border);
+  padding: 28px 40px;
+}
+.feat-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 0; }
+.feat-item {
+  flex: 1; display: flex; align-items: center; gap: 14px;
+  padding: 0 24px; border-right: 1px solid var(--c-border);
+}
+.feat-item:first-child { padding-left: 0; }
+.feat-item:last-child { border-right: none; }
+.feat-icon {
+  width: 44px; height: 44px; background: var(--c-warm); border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: var(--c-sage); flex-shrink: 0;
+}
+.feat-text strong { display: block; font-size: 14px; font-weight: 600; color: var(--c-text); }
+.feat-text span { font-size: 12.5px; color: var(--c-muted); }
+</style>
+</head>
+
+<body>
+
+<!-- ===================== NAVBAR ===================== -->
+<nav class="navbar">
+  <div class="nav-logo" onclick="showPage('home')">
+    <div class="nav-logo-leaf"><i class="ti ti-leaf" style="font-size:18px"></i></div>
+    Sustany.co
+  </div>
+
+  <div class="nav-center">
+    <button class="nav-btn active" onclick="navTo('home', this)">Beranda</button>
+    <button class="nav-btn" onclick="navTo('marketplace', this)">Marketplace</button>
+    <button class="nav-btn" onclick="navTo('subscription', this)">Subscription Box</button>
+  </div>
+
+  <div class="nav-right">
+    <button class="btn-wa-nav" onclick="openWA('Halo Sustany.co! Saya ingin bertanya tentang produk kalian 🌿')">
+      <i class="ti ti-brand-whatsapp" style="font-size:16px"></i> Chat Kami
+    </button>
+    <button class="btn-cart" onclick="showPage('cart')">
+      <i class="ti ti-shopping-bag" style="font-size:16px"></i>
+      Keranjang
+      <span class="cart-dot" id="cartBadge">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===================== HOME PAGE ===================== -->
+<div id="page-home" class="page active">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <i class="ti ti-leaf" style="font-size:13px"></i>
+        #ZeroWaste Movement Indonesia
+      </div>
+      <h1>Gaya hidup<br><em>zero waste</em><br>dimulai dari sini.</h1>
+      <p>Platform e-commerce & subscription box produk ramah lingkungan yang dikurasi khusus untuk kehidupan sehari-harimu. Satu langkah kecil, dampak besar untuk bumi.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="showPage('subscription')">
+          <i class="ti ti-box" style="font-size:16px"></i> Pilih Subscription Box
+        </button>
+        <button class="btn-outline-light" onclick="showPage('marketplace')">Jelajahi Produk</button>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">2.4t</div>
+          <div class="hero-stat-label">Plastik dikurangi</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">847+</div>
+          <div class="hero-stat-label">Pelanggan aktif</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">120+</div>
+          <div class="hero-stat-label">Produk eco-friendly</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">50+</div>
+          <div class="hero-stat-label">Mitra UMKM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=900&auto=format&fit=crop&q=80" alt="Zero Waste Lifestyle">
+      <div class="hero-right-overlay"></div>
+      <div class="hero-badge">
+        <div class="hero-badge-icon"><i class="ti ti-award" style="font-size:22px;color:var(--c-forest)"></i></div>
+        <div class="hero-badge-text">
+          <strong>Terpercaya #1</strong>
+          <span>Zero Waste Platform Indonesia</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Strip -->
+  <div class="feat-strip">
+    <div class="feat-inner">
+      <div class="feat-item">
+        <div class="feat-icon"><i class="ti ti-truck-delivery"></i></div>
+        <div class="feat-text">
+          <strong>Gratis Ongkir</strong>
+          <span>Min. pembelian Rp75.000</span>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon"><i class="ti ti-recycle"></i></div>
+        <div class="feat-text">
+          <strong>Kemasan Zero Plastik</strong>
+          <span>100% kardus daur ulang</span>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon"><i class="ti ti-shield-check"></i></div>
+        <div class="feat-text">
+          <strong>Produk Tersertifikasi</strong>
+          <span>Organik & bebas bahan kimia</span>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon"><i class="ti ti-brand-whatsapp"></i></div>
+        <div class="feat-text">
+          <strong>CS via WhatsApp</strong>
+          <span>Respon dalam 1 jam</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Products -->
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Produk <em>Terlaris</em></div>
+        <div class="section-subtitle">Pilihan terbaik untuk memulai perjalanan zero waste-mu</div>
+      </div>
+      <button class="btn-link" onclick="navTo('marketplace', document.querySelectorAll('.nav-btn')[1])">
+        Lihat semua <i class="ti ti-arrow-right"></i>
+      </button>
+    </div>
+    <div class="products-grid" id="homeGrid"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3><i class="ti ti-leaf" style="color:var(--c-mint)"></i> Sustany.co</h3>
+          <p>Platform e-commerce & subscription box produk ramah lingkungan. Bersama kita kurangi sampah plastik satu langkah dalam satu waktu.</p>
+          <button class="footer-wa-cta" onclick="openWA('Halo! Saya ingin tahu lebih lanjut tentang Sustany.co 🌿')">
+            <i class="ti ti-brand-whatsapp"></i> +62 888-0222-8584
+          </button>
+        </div>
+        <div class="footer-col">
+          <h4>Produk</h4>
+          <span class="footer-link" onclick="showPage('marketplace')">Marketplace</span>
+          <span class="footer-link" onclick="showPage('subscription')">Subscription Box</span>
+          <span class="footer-link">Produk Baru</span>
+          <span class="footer-link">Promo</span>
+        </div>
+        <div class="footer-col">
+          <h4>Perusahaan</h4>
+          <span class="footer-link">Tentang Kami</span>
+          <span class="footer-link">Blog</span>
+          <span class="footer-link">Karir</span>
+          <span class="footer-link">Press</span>
+        </div>
+        <div class="footer-col">
+          <h4>Bantuan</h4>
+          <span class="footer-link" onclick="openWA('Halo, saya butuh bantuan!')">Customer Service</span>
+          <span class="footer-link">FAQ</span>
+          <span class="footer-link">Kebijakan Privasi</span>
+          <span class="footer-link">Syarat & Ketentuan</span>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Sustany.co · Universitas Pamulang · All rights reserved</p>
+        <div class="footer-eco-badge">
+          <i class="ti ti-leaf"></i> Dibuat dengan ♥ untuk bumi yang lebih sehat
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ===================== MARKETPLACE PAGE ===================== -->
+<div id="page-marketplace" class="page">
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Marketplace <em>Eco-Friendly</em></div>
+        <div class="section-subtitle">Semua produk zero waste tersedia dalam satu tempat</div>
+      </div>
+    </div>
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-chip active" onclick="filterCat('semua', this)"><i class="ti ti-plant" style="font-size:13px;margin-right:5px"></i>Semua</button>
+      <button class="filter-chip" onclick="filterCat('dapur', this)"><i class="ti ti-chef-hat" style="font-size:13px;margin-right:5px"></i>Dapur</button>
+      <button class="filter-chip" onclick="filterCat('personal care', this)"><i class="ti ti-sparkles" style="font-size:13px;margin-right:5px"></i>Personal Care</button>
+      <button class="filter-chip" onclick="filterCat('lifestyle', this)"><i class="ti ti-world" style="font-size:13px;margin-right:5px"></i>Lifestyle</button>
+    </div>
+    <div class="products-grid" id="marketGrid"></div>
+  </div>
+</div>
+
+<!-- ===================== SUBSCRIPTION PAGE ===================== -->
+<div id="page-subscription" class="page">
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Pilih <em>Sustany Box</em> Untukmu</div>
+        <div class="section-subtitle">Paket langganan bulanan yang disesuaikan dengan kebutuhanmu</div>
+      </div>
+    </div>
+    <div class="box-grid" id="boxGrid"></div>
+  </div>
+</div>
+
+<!-- ===================== CART PAGE ===================== -->
+<div id="page-cart" class="page">
+  <div class="section">
+    <div class="section-title" style="margin-bottom:28px">
+      <i class="ti ti-shopping-bag" style="color:var(--c-sage);margin-right:10px;font-size:26px;vertical-align:-4px"></i>Keranjang Belanja
+    </div>
+    <div class="cart-layout">
+      <div class="cart-panel">
+        <div class="cart-panel-hdr">
+          <i class="ti ti-package" style="color:var(--c-sage)"></i> Item Pesanan
+        </div>
+        <div id="cartItemsList"></div>
+      </div>
+      <div id="orderSummary"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAYMENT PAGE ===================== -->
+<div id="page-payment" class="page">
+  <div class="pay-page">
+    <h2>Pilih Metode Pembayaran</h2>
+    <p>Selesaikan pembayaran Anda dengan aman &amp; mudah</p>
+
+    <div class="pay-card">
+      <div class="pay-card-hdr"><i class="ti ti-receipt" style="color:var(--c-sage)"></i> Total Pembayaran</div>
+      <div class="pay-total-box">
+        <div class="pay-total-amt" id="payTotal">Rp 0</div>
+        <div class="pay-total-lbl">Sudah termasuk ongkos kirim &amp; impact offset</div>
+      </div>
+
+      <div class="pay-card-hdr" style="margin-bottom:12px"><i class="ti ti-wallet" style="color:var(--c-sage)"></i> E-Wallet</div>
+      <div class="pay-opts-grid">
+        <div class="pay-opt" onclick="selPay('gopay',this)"><div class="pay-opt-logo gopay-c">GoPay</div><div class="pay-opt-name">GoPay</div></div>
+        <div class="pay-opt" onclick="selPay('ovo',this)"><div class="pay-opt-logo ovo-c">OVO</div><div class="pay-opt-name">OVO</div></div>
+        <div class="pay-opt" onclick="selPay('dana',this)"><div class="pay-opt-logo dana-c">DANA</div><div class="pay-opt-name">DANA</div></div>
+      </div>
+
+      <div class="pay-card-hdr" style="margin-top:18px;margin-bottom:12px"><i class="ti ti-building-bank" style="color:var(--c-sage)"></i> Transfer Bank</div>
+      <div class="pay-opts-grid">
+        <div class="pay-opt" onclick="selPay('bca',this)"><div class="pay-opt-logo bca-c">BCA</div><div class="pay-opt-name">Bank BCA</div></div>
+        <div class="pay-opt" onclick="selPay('mandiri',this)"><div class="pay-opt-logo mdr-c">MDR</div><div class="pay-opt-name">Mandiri</div></div>
+        <div class="pay-opt" onclick="selPay('bni',this)"><div class="pay-opt-logo bni-c">BNI</div><div class="pay-opt-name">Bank BNI</div></div>
+      </div>
+
+      <div class="pay-card-hdr" style="margin-top:18px;margin-bottom:12px"><i class="ti ti-qrcode" style="color:var(--c-sage)"></i> QRIS</div>
+      <div class="pay-opts-grid">
+        <div class="pay-opt pay-qris" onclick="selPay('qris',this)">
+          <div class="pay-opt-logo qris-c">QRIS</div>
+          <div class="pay-opt-name">Scan &amp; Pay — semua bank &amp; e-wallet</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-pay" id="payBtn" onclick="doPayment()">
+      <i class="ti ti-lock" style="font-size:18px"></i> Bayar Sekarang
+    </button>
+    <button class="btn-back-ghost" onclick="showPage('cart')">
+      <i class="ti ti-arrow-left"></i> Kembali ke Keranjang
+    </button>
+    <div class="secure-note" style="margin-top:16px">
+      <i class="ti ti-shield-check" style="color:var(--c-sage)"></i>
+      Pembayaran aman &amp; terenkripsi SSL 256-bit
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SUCCESS PAGE ===================== -->
+<div id="page-success" class="page">
+  <div class="success-page">
+    <div class="success-icon"><i class="ti ti-check" style="font-size:48px;color:var(--c-forest)"></i></div>
+    <h2>Pesanan Berhasil!</h2>
+    <p>Terima kasih sudah memilih gaya hidup zero waste bersama Sustany.co 🌿<br>Pesananmu akan kami proses dalam 1×24 jam kerja.</p>
+    <div class="order-badge">
+      Nomor Pesanan <span id="orderNum">#SUS-000001</span>
+    </div>
+    <div class="success-btns">
+      <button class="btn-success-main" onclick="showPage('marketplace')">
+        <i class="ti ti-shopping-bag"></i> Lanjut Belanja
+      </button>
+      <button class="btn-wa-order" id="waConfirmBtn" onclick="">
+        <i class="ti ti-brand-whatsapp"></i> Konfirmasi via WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- WhatsApp Float -->
+<div class="wa-float" onclick="openWA('Halo Sustany.co! Saya ingin bertanya tentang produk kalian 🌿')">
+  <i class="ti ti-brand-whatsapp"></i>
+  <div class="wa-tip">Chat via WhatsApp</div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- ===================== JAVASCRIPT ===================== -->
+<script>
+/* ================================================================
+   DATA
+   ================================================================ */
+const PRODUCTS = [
+  {
+    id: 1, name: 'Sikat Gigi Bambu', brand: 'EcoBrush',
+    price: 15000, oldPrice: 20000, cat: 'personal care',
+    eco: 'Biodegradable',
+    desc: 'Gagang bambu alami, bulu sikat nylon lembut bebas BPA. Terurai dalam 6 bulan.',
+    img : 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=80',
+    icon: '🪥'
+  },
+  {
+    id: 2, name: 'Sedotan Stainless Steel', brand: 'MetalSip',
+    price: 25000, cat: 'dapur',
+    eco: 'Reusable',
+    desc: 'Set 4 sedotan stainless food-grade + sikat pembersih. Awet seumur hidup.',
+    img: 'images/SedotanStainless.jpeg',
+    icon: '🥤'
+  },
+  {
+    id: 3, name: 'Tote Bag Kanvas', brand: 'GreenCarry',
+    price: 45000, cat: 'lifestyle',
+    eco: 'Zero Plastik',
+    desc: 'Kanvas tebal 12oz, dapat dicuci, ideal untuk belanja harian.',
+    img: 'images/totebagkanvas.jpeg',
+    icon: '👜'
+  },
+  {
+    id: 4, name: 'Shampoo Bar Organik', brand: 'NaturaCare',
+    price: 38000, oldPrice: 50000, cat: 'personal care',
+    eco: 'Organik',
+    desc: 'Setara 2 botol sampo cair. SLS-free, vegan, aroma lavender dan mint.',
+     img: 'images/Shampobarorganik.jpeg',
+    icon: '🧴'
+  },
+  {
+    id: 5, name: 'Beeswax Wrap', brand: 'HoneyWrap',
+    price: 55000, cat: 'dapur',
+    eco: 'Plastik-free',
+    desc: 'Pembungkus makanan dari lilin lebah alami, dapat dipakai berulang kali.',
+    img: 'images/Beeswaxwrap.jpeg',
+    icon: '🍯'
+  },
+  {
+    id: 6, name: 'Sabut Kelapa Pencuci', brand: 'CocoScrub',
+    price: 12000, cat: 'dapur',
+    eco: 'Kompostable',
+    desc: 'Sabut kelapa alami pengganti spons plastik, antibakteri alami.',
+    img: 'images/sabutkelapapencuci.jpeg',
+    icon: '🥥'
+  },
+  {
+    id: 7, name: 'Pasta Gigi Tablet', brand: 'TabiDent',
+    price: 48000, cat: 'personal care',
+    eco: 'Zero Waste',
+    desc: '60 tablet = 2 bulan pemakaian. Tanpa tube plastik, fluoride-free tersedia.',
+    img: 'images/pastagigitablet.jpeg',
+    icon: '🦷'
+  },
+  {
+    id: 8, name: 'Tumbler Stainless 500ml', brand: 'EcoSip',
+    price: 85000, cat: 'lifestyle',
+    eco: 'Reusable',
+    desc: 'Double-wall vacuum insulated. Panas 12 jam, dingin 24 jam.',
+    img: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500&auto=format&fit=crop&q=80',
+    icon: '🫗'
+  },
+  {
+    id: 9, name: 'Sabun Organik Lavender', brand: 'PureSoap',
+    price: 32000, cat: 'personal care',
+    eco: 'Organik',
+    desc: 'Cold-process, essential oil lavender asli, bebas kimia keras dan paraben.',
+    img: 'https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?w=500&auto=format&fit=crop&q=80',
+    icon: '🧼'
+  },
+  {
+    id: 10, name: 'Peralatan Makan Bambu', brand: 'BambooSet',
+    price: 75000, cat: 'dapur',
+    eco: 'Biodegradable',
+    desc: 'Set sendok, garpu, sumpit & pisau bambu + kantong kain pouch.',
+    img: 'images/Peralatanmakanbambu.jpeg',
+    icon: '🥢'
+  },
+  {
+    id: 11, name: 'Reusable Silicone Pouch', brand: 'SiliPack',
+    price: 62000, cat: 'dapur',
+    eco: 'Reusable',
+    desc: 'Kantong silikon food-grade, tahan beku & microwave. Anti bocor.',
+    img: 'images/Reusablesiliconepouch.jpeg',
+    icon: '🫙'
+  },
+  {
+    id: 12, name: 'Tote Bag Daur Ulang', brand: 'RecycleWear',
+    price: 120000, cat: 'lifestyle',
+    eco: 'Daur Ulang',
+    desc: 'Dibuat dari 5 botol plastik bekas daur ulang. Kuat & tahan air.',
+    img: 'images/TasBelanjaJaringKatun.jpeg',
+    icon: '🧢'
+  }
+];
+
+const BOXES = [
+  {
+    id: 'b1', name: 'Starter Box', tag: 'Eco-Newbie', price: 95000,
+    icon: '📦', popular: false,
+    desc: 'Cocok untuk kamu yang baru memulai perjalanan zero waste. Produk esensial untuk transisi pertamamu.',
+    items: [
+      { icon: 'ti-toothbrush', text: 'Sikat Gigi Bambu' },
+      { icon: 'ti-glass', text: 'Sedotan Stainless Steel' },
+      { icon: 'ti-backpack', text: 'Tote Bag Kanvas' }
+    ]
+  },
+  {
+    id: 'b2', name: 'Personal Care Box', tag: '', price: 135000,
+    icon: '🧴', popular: true,
+    desc: 'Paket perawatan diri lengkap tanpa sampah plastik. Formula organik, lembut di kulit & bumi.',
+    items: [
+      { icon: 'ti-droplet', text: 'Shampoo Bar Organik' },
+      { icon: 'ti-sparkles', text: 'Sabun Organik Lavender' },
+      { icon: 'ti-toothbrush', text: 'Sikat Gigi Bambu' },
+      { icon: 'ti-pill', text: 'Pasta Gigi Tablet' }
+    ]
+  },
+  {
+    id: 'b3', name: 'Kitchen Eco-Box', tag: '', price: 115000,
+    icon: '🍃', popular: false,
+    desc: 'Revolusi dapur ramah lingkungan. Semua yang kamu butuhkan untuk memasak & makan tanpa plastik.',
+    items: [
+      { icon: 'ti-brand-docker', text: 'Reusable Silicone Pouch' },
+      { icon: 'ti-plant', text: 'Sabut Kelapa Pencuci' },
+      { icon: 'ti-archive', text: 'Beeswax Wrap' },
+      { icon: 'ti-tools-kitchen-2', text: 'Peralatan Makan Bambu' }
+    ]
+  }
+];
+
+/* ================================================================
+   STATE
+   ================================================================ */
+let cart = [];
+let currentFilter = 'semua';
+let selectedPayment = '';
+let orderCount = 1;
+let discountPct = 0;
+
+/* ================================================================
+   UTILS
+   ================================================================ */
+const fmt = n => 'Rp ' + n.toLocaleString('id-ID');
+const WA_NUMBER = '6288802228584'; // Ganti dengan nomor WhatsApp bisnis Anda
+
+function openWA(msg) {
+  window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg), '_blank');
+}
+
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.innerHTML = msg;
+  el.style.opacity = '1';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.style.opacity = '0', 2200);
+}
+
+/* ================================================================
+   RENDER PRODUCT CARD
+   ================================================================ */
+function renderCard(p) {
+  return `
+<div class="product-card" onclick="addToCart(${p.id})">
+  <div class="pc-img">
+    <img src="${p.img}" alt="${p.name}" loading="lazy"
+         onerror="this.parentElement.innerHTML='<div style=\'height:100%;display:flex;align-items:center;justify-content:center;font-size:52px\'>${p.icon}</div>'">
+    <div class="pc-eco"><i class="ti ti-leaf" style="font-size:11px"></i> ${p.eco}</div>
+    <button class="pc-wish" onclick="event.stopPropagation()" title="Wishlist">
+      <i class="ti ti-heart"></i>
+    </button>
+  </div>
+  <div class="pc-body">
+    <div class="pc-brand">${p.brand}</div>
+    <div class="pc-name">${p.name}</div>
+    <div class="pc-desc">${p.desc}</div>
+    <div class="pc-footer">
+      <div>
+        <span class="pc-price">${fmt(p.price)}</span>
+        ${p.oldPrice ? `<span class="pc-price-old">${fmt(p.oldPrice)}</span>` : ''}
+      </div>
+      <button class="btn-add" onclick="event.stopPropagation();addToCart(${p.id})" title="Tambah ke keranjang">
+        <i class="ti ti-plus" style="font-size:18px"></i>
+      </button>
+    </div>
+  </div>
+</div>`;
+}
+
+/* ================================================================
+   RENDER PAGES
+   ================================================================ */
+function renderHome() {
+  document.getElementById('homeGrid').innerHTML = PRODUCTS.slice(0, 4).map(renderCard).join('');
+}
+
+function renderMarket() {
+  const list = currentFilter === 'semua' ? PRODUCTS : PRODUCTS.filter(p => p.cat === currentFilter);
+  document.getElementById('marketGrid').innerHTML = list.map(renderCard).join('');
+}
+
+function renderBoxes() {
+  document.getElementById('boxGrid').innerHTML = BOXES.map(b => `
+<div class="box-card ${b.popular ? 'is-popular' : ''}" onclick="addBox('${b.id}')">
+  ${b.popular ? '<div class="box-pop-badge"><i class="ti ti-star-filled" style="color:#B45309;font-size:12px"></i> Paling Populer</div>' : ''}
+  <div class="box-icon">${b.icon}</div>
+  <div class="box-name">${b.name}</div>
+  ${b.tag ? `<div class="box-tag">${b.tag}</div>` : ''}
+  <div class="box-desc">${b.desc}</div>
+  <ul class="box-items-list">
+    ${b.items.map(i => `<li class="box-item"><i class="ti ${i.icon}" style="font-size:16px"></i>${i.text}</li>`).join('')}
+  </ul>
+  <div class="box-footer">
+    <div>
+      <div class="box-price-main">${fmt(b.price)}</div>
+      <div class="box-price-per">per bulan</div>
+    </div>
+    <button class="btn-subscribe" onclick="event.stopPropagation();addBox('${b.id}')">
+      <i class="ti ti-box" style="font-size:15px"></i> Langganan
+    </button>
+  </div>
+</div>`).join('');
+}
+
+/* ================================================================
+   CART OPERATIONS
+   ================================================================ */
+function addToCart(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  const ex = cart.find(x => x.id === id);
+  if (ex) ex.qty++;
+  else cart.push({ id: p.id, name: p.name, price: p.price, img: p.img, brand: p.brand, icon: p.icon, qty: 1, isBox: false });
+  updateBadge();
+  showToast(`<i class="ti ti-check" style="color:#A8D5B8"></i> ${p.name} ditambahkan!`);
+}
+
+function addBox(id) {
+  const b = BOXES.find(x => x.id === id);
+  if (!b) return;
+  const ex = cart.find(x => x.id === id);
+  if (ex) ex.qty++;
+  else cart.push({ id: b.id, name: b.name, price: b.price, img: null, brand: 'Sustany Box', icon: b.icon, qty: 1, isBox: true });
+  updateBadge();
+  showToast(`<i class="ti ti-box" style="color:#A8D5B8"></i> ${b.name} ditambahkan!`);
+}
+
+function changeQty(id, delta) {
+  const idx = cart.findIndex(x => x.id == id);
+  if (idx < 0) return;
+  cart[idx].qty += delta;
+  if (cart[idx].qty <= 0) cart.splice(idx, 1);
+  updateBadge(); renderCart();
+}
+
+function removeItem(id) {
+  cart = cart.filter(x => x.id != id);
+  updateBadge(); renderCart();
+}
+
+function updateBadge() {
+  const total = cart.reduce((s, i) => s + i.qty, 0);
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = total;
+  badge.classList.add('bump');
+  setTimeout(() => badge.classList.remove('bump'), 300);
+}
+
+/* ================================================================
+   RENDER CART
+   ================================================================ */
+function renderCart() {
+  const listEl = document.getElementById('cartItemsList');
+  const summaryEl = document.getElementById('orderSummary');
+  if (!listEl) return;
+
+  if (cart.length === 0) {
+    listEl.innerHTML = `
+<div class="cart-empty">
+  <div class="cart-empty-icon"><i class="ti ti-shopping-cart-off"></i></div>
+  <h3>Keranjang kosong</h3>
+  <p>Tambahkan produk favoritmu dulu yuk!</p>
+  <button class="btn-primary" style="margin:0 auto" onclick="showPage('marketplace')">
+    <i class="ti ti-shopping-bag"></i> Belanja Sekarang
+  </button>
+</div>`;
+    summaryEl.innerHTML = '';
+    return;
+  }
+
+  listEl.innerHTML = cart.map(item => `
+<div class="cart-item">
+  <div class="ci-img">
+    ${item.img
+      ? `<img src="${item.img}" alt="${item.name}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+         <span style="display:none;font-size:28px;width:100%;height:100%;align-items:center;justify-content:center">${item.icon}</span>`
+      : `<span style="font-size:28px">${item.icon}</span>`
+    }
+  </div>
+  <div class="ci-info">
+    <div class="ci-brand">${item.brand}${item.isBox ? ' · Subscription' : ''}</div>
+    <div class="ci-name">${item.name}</div>
+    <div class="ci-price">${fmt(item.price)}${item.isBox ? '/bln' : ''}</div>
+  </div>
+  <div class="qty-ctrl">
+    <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
+    <span class="qty-num">${item.qty}</span>
+    <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+  </div>
+  <button class="remove-btn" onclick="removeItem('${item.id}')" title="Hapus">
+    <i class="ti ti-trash"></i>
+  </button>
+</div>`).join('');
+
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const disc = Math.round(subtotal * discountPct / 100);
+  const ongkir = subtotal >= 75000 ? 0 : 15000;
+  const total = subtotal - disc + ongkir;
+
+  summaryEl.innerHTML = `
+<div class="order-summary">
+  <div class="os-title">Ringkasan Pesanan</div>
+
+  <div class="promo-row">
+    <input class="promo-input" type="text" placeholder="Kode promo..." id="promoField">
+    <button class="promo-btn" onclick="applyPromo()">Pakai</button>
+  </div>
+
+  <div class="sum-row"><span class="sum-label">Subtotal (${cart.reduce((s,i)=>s+i.qty,0)} item)</span><span class="sum-val">${fmt(subtotal)}</span></div>
+  <div class="sum-row"><span class="sum-label">Ongkos kirim</span><span class="sum-val">${ongkir === 0 ? '<span style="color:var(--c-sage);font-weight:600">Gratis!</span>' : fmt(ongkir)}</span></div>
+  <div class="sum-row"><span class="sum-label" style="color:var(--c-sage)"><i class="ti ti-leaf" style="font-size:13px;margin-right:4px"></i>Impact offset</span><span style="color:var(--c-sage);font-weight:500;font-size:13px">Gratis</span></div>
+  ${disc > 0 ? `<div class="sum-row"><span class="sum-label" style="color:var(--c-sage)">Diskon ${discountPct}%</span><span style="color:var(--c-sage);font-weight:600">-${fmt(disc)}</span></div>` : ''}
+
+  <hr class="sum-divider">
+  <div class="sum-total-row">
+    <span class="sum-total-label">Total</span>
+    <span class="sum-total-val">${fmt(total)}</span>
+  </div>
+
+  <div class="pm-section">
+    <div class="pm-label">Bayar dengan</div>
+    <div class="pm-grid">
+      <div class="pm-opt" onclick="selPayCart('gopay',this)"><div class="pm-logo gopay-c">GoPay</div><div class="pm-name">GoPay</div></div>
+      <div class="pm-opt" onclick="selPayCart('ovo',this)"><div class="pm-logo ovo-c">OVO</div><div class="pm-name">OVO</div></div>
+      <div class="pm-opt" onclick="selPayCart('dana',this)"><div class="pm-logo dana-c">DANA</div><div class="pm-name">DANA</div></div>
+      <div class="pm-opt" onclick="selPayCart('qris',this)"><div class="pm-logo qris-c">QRIS</div><div class="pm-name">QRIS</div></div>
+    </div>
+  </div>
+
+  <button class="btn-checkout" onclick="goToPayment()">
+    <i class="ti ti-credit-card" style="font-size:16px"></i> Lanjut Pembayaran
+  </button>
+  <button class="btn-wa-order" onclick="orderViaWA()">
+    <i class="ti ti-brand-whatsapp" style="font-size:16px"></i> Pesan via WhatsApp
+  </button>
+  <div class="secure-note">
+    <i class="ti ti-shield-check" style="color:var(--c-sage)"></i>
+    Transaksi aman & terlindungi
+  </div>
+</div>`;
+}
+
+/* ================================================================
+   PROMO CODES
+   ================================================================ */
+function applyPromo() {
+  const code = (document.getElementById('promoField')?.value || '').toUpperCase().trim();
+  const promos = { 'SUSTANY10': 10, 'ZEROWASTE': 15, 'PAMULANG': 20, 'BUMI2026': 12 };
+  if (promos[code]) {
+    discountPct = promos[code];
+    renderCart();
+    showToast(`<i class="ti ti-discount-2" style="color:#A8D5B8"></i> Promo ${code} aktif! Diskon ${discountPct}%`);
+  } else {
+    showToast('<i class="ti ti-x" style="color:#F09595"></i> Kode promo tidak valid');
+  }
+}
+
+/* ================================================================
+   PAYMENT
+   ================================================================ */
+let cartPayMethod = '';
+function selPayCart(method, el) {
+  document.querySelectorAll('#orderSummary .pm-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected'); cartPayMethod = method;
+}
+
+function goToPayment() {
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const disc = Math.round(subtotal * discountPct / 100);
+  const ongkir = subtotal >= 75000 ? 0 : 15000;
+  const total = subtotal - disc + ongkir;
+  document.getElementById('payTotal').textContent = fmt(total);
+  showPage('payment');
+}
+
+function selPay(method, el) {
+  document.querySelectorAll('.pay-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected'); selectedPayment = method;
+}
+
+function doPayment() {
+  if (!selectedPayment && !cartPayMethod) {
+    showToast('<i class="ti ti-alert-triangle" style="color:#FAC775"></i> Pilih metode pembayaran dulu!');
+    return;
+  }
+  const num = '#SUS-' + String(orderCount++).padStart(6, '0');
+  document.getElementById('orderNum').textContent = num;
+
+  const orderText = `Halo Sustany.co! 🌿\n\nSaya telah melakukan pembayaran dengan nomor pesanan ${num}.\nMetode: ${(selectedPayment || cartPayMethod).toUpperCase()}\n\nMohon konfirmasinya, terima kasih!`;
+  document.getElementById('waConfirmBtn').onclick = () => openWA(orderText);
+
+  cart = []; discountPct = 0; cartPayMethod = ''; selectedPayment = '';
+  updateBadge(); showPage('success');
+}
+
+function orderViaWA() {
+  const items = cart.map(i => `• ${i.name} x${i.qty} — ${fmt(i.price * i.qty)}`).join('\n');
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const disc = Math.round(subtotal * discountPct / 100);
+  const ongkir = subtotal >= 75000 ? 0 : 15000;
+  const total = subtotal - disc + ongkir;
+  const msg = `Halo Sustany.co! 🌿\nSaya ingin memesan:\n\n${items}\n\nSubtotal: ${fmt(subtotal)}${disc > 0 ? `\nDiskon: -${fmt(disc)}` : ''}\nOngkir: ${ongkir === 0 ? 'Gratis' : fmt(ongkir)}\n*Total: ${fmt(total)}*\n\nMohon konfirmasinya ya, terima kasih!`;
+  openWA(msg);
+}
+
+/* ================================================================
+   NAVIGATION
+   ================================================================ */
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  if (p === 'cart') renderCart();
+  if (p === 'marketplace') renderMarket();
+  if (p === 'subscription') renderBoxes();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function navTo(p, btn) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (btn && btn.classList) btn.classList.add('active');
+  showPage(p);
+}
+
+function filterCat(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMarket();
+}
+
+/* ================================================================
+   INIT
+   ================================================================ */
+renderHome();
+</script>
+</body>
+</html>
